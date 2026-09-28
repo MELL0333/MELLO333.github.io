@@ -216,13 +216,13 @@
 
         <form id="formCorredor">
           <div class="campo">
-            <label for="nome">Nome</label>
-            <input id="nome" type="text" placeholder="Digite o nome do corredor" required />
+            <label for="Nome">Nome</label>
+            <input id="Nome" type="text" placeholder="Digite o Nome do corredor" required />
           </div>
 
           <div class="campo">
-            <label for="categoria">Categoria</label>
-            <input id="categoria" type="text" placeholder="Digite a categoria" required />
+            <label for="Percuso">Percuso</label>
+            <input id="Percuso" type="text" placeholder="Digite a Percuso" required />
           </div>
 
           <div class="campo">
@@ -232,7 +232,7 @@
 
           <div class="campo">
             <label for="CPF">CPF</label>
-            <input id="CPF" type="text" placeholder="Digite o CPF" required />
+            <input id="CPF" type="number" placeholder="Digite o CPF" required />
           </div>
 
           <button class="botao" type="submit">Salvar corredor</button>
@@ -243,8 +243,8 @@
       document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
         evento.preventDefault();
 
-        const Nome = document.querySelector("#nome").value.trim();
-        const Percuso = document.querySelector("#categoria").value.trim();
+        const Nome = document.querySelector("#Nome").value.trim();
+        const Percuso = document.querySelector("#Percuso").value.trim();
          const Idade = document.querySelector("#Idade").value.trim();
         const CPF = document.querySelector("#CPF").value.trim();
 
