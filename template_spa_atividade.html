@@ -243,14 +243,14 @@
       document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
         evento.preventDefault();
 
-        const nome = document.querySelector("#nome").value.trim();
-        const categoria = document.querySelector("#categoria").value.trim();
+        const Nome = document.querySelector("#nome").value.trim();
+        const Percuso = document.querySelector("#categoria").value.trim();
          const Idade = document.querySelector("#Idade").value.trim();
         const CPF = document.querySelector("#CPF").value.trim();
 
         corredores.push({
           nome,
-          categoria,
+          percuso,
           Idade,
           CPF
         });
@@ -289,8 +289,8 @@
       corredores.forEach((corredor, indice) => {
         linhas += `
           <tr>
-            <td>${corredor.nome}</td>
-            <td>${corredor.categoria}</td>
+            <td>${corredor.Nome}</td>
+            <td>${corredor.Percuso}</td>
             <td>${corredor.CPF}</td>
             <td>${corredor.Idade}</td>
             <td>
@@ -305,7 +305,7 @@
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Categoria</th>
+              <th>Percuso</th>
               <th>CPF</th>
               <th>Idade</th>
               <th>Ações</th>
