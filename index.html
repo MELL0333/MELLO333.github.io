@@ -218,7 +218,14 @@
       document.querySelector("#btnVerCorredores")
         .addEventListener("click", () => irPara("lista"));
     }
-
+    function mascaraCPF(valor) {
+     return valor
+     .replace(/\D/g, "")                 
+     .slice(0, 11)                        
+     .replace(/(\d{3})(\d)/, "$1.$2")     
+     .replace(/(\d{3})(\d)/, "$1.$2")     
+     .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
+    }
     function mostrarCadastro() {
       app.innerHTML = `
         <h1>Cadastrar Corredor</h1>
@@ -246,16 +253,20 @@
 
           <div class="campo">
             <label for="CPF">CPF</label>
-            <input id="CPF" type="text" placeholder="Digite o CPF" required />
+            <input id="CPF" type="text" placeholder="000.000.000-00"
+                    maxlength="14" inputmode="numeric" required />
           </div>
 
           <button class="botao" type="submit">Salvar corredor</button>
           <div id="mensagem"></div>
         </form>
       `;
-
-      document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
-        evento.preventDefault();
+    const campoCPF = document.querySelector("#CPF");
+          campoCPF.addEventListener("input", () => {
+  campoCPF.value = mascaraCPF(campoCPF.value);
+});
+          document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
+            evento.preventDefault();
 
         const nome = document.querySelector("#nome").value.trim();
         const Percurso = document.querySelector("#Percurso").value.trim();
@@ -266,7 +277,12 @@
           document.querySelector("#mensagem").innerHTML =
           `<div class="mensagem">Para o percurso de 10 km a idade mínima é 18 anos.</div>`;
         return;
-}
+        }
+        if (CPF.replace(/\D/g, "").length !== 11) { 
+          document.querySelector("#mensagem").innerHTML =
+          `<div class="mensagem">CPF inválido. Digite os 11 números.</div>`;
+         return;
+        }
 
         corredores.push({
           nome,
