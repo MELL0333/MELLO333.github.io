@@ -10,13 +10,13 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #000000;
-      color: #088dba;
+      background: #0F172A;
+      color: #f8f1f9;
     }
 
     header {
-      border-bottom: 1px solid #0a91ba;
-      background: #091ec2;
+      border-bottom: 1px solid #334155;
+      background: #1E293B;
     }
 
     nav {
@@ -39,7 +39,7 @@
 
     nav button:hover,
     nav button.ativo {
-      background: #a4c20c;
+      background: #EA580C;
     }
 
     main {
@@ -65,8 +65,8 @@
     }
 
     .botao {
-      border: 1px solid #e92304;
-      background: #cb1d1d;
+      border: 1px solid #55334b;
+      background: #EA580C;
       color: rgb(217, 225, 226);
       padding: 10px 16px;
       cursor: pointer;
@@ -75,7 +75,7 @@
 
     .botao.secundario {
       background: rgb(254, 254, 254);
-      color: #050404;
+      color: #EA580C;
     }
 
     form {
@@ -95,7 +95,7 @@
     input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #e2e0e0;
+      border: 1px solid #e2e0e1;
       border-radius: 6px;
       font-size: 15px;
     }
@@ -109,16 +109,16 @@
     th, td {
       text-align: left;
       padding: 12px;
-      border-bottom: 1px solid #e2e0e0;
+      border-bottom: 1px solid #334155;
     }
 
     th {
-      background: #f7f7f7;
+      background: #1e293b;
     }
 
     .excluir {
-      border: 1px solid #c33;
-      color: rgb(243, 238, 238);
+      border: 1px solid #EF4444;
+      color: #f1f5f9;
       background: rgb(247, 3, 3);
       padding: 7px 10px;
       border-radius: 5px;
@@ -128,7 +128,7 @@
     .mensagem {
       margin-top: 14px;
       padding: 10px;
-      background: #f4f4f4;
+      background: #94A3B8;
       border-radius: 6px;
     }
 
@@ -137,7 +137,7 @@
       padding: 20px;
       border: 1px dashed #e2e0e0;
       border-radius: 6px;
-      color: #f30101;
+      color: #1e293b;
     }
 
     .contador {
@@ -160,8 +160,7 @@
   <main id="app"></main>
 
   <script>
-    // Os dados ficam apenas na memória.
-    // Se a página for atualizada, eles serão apagados.
+  
     const corredores = [];
 
     const app = document.querySelector("#app");
@@ -216,23 +215,34 @@
 
         <form id="formCorredor">
           <div class="campo">
-            <label for="Nome">Nome</label>
-            <input id="Nome" type="text" placeholder="Digite o Nome do corredor" required />
+            <label for="nome">Nome</label>
+            <input id="nome" type="text" placeholder="Digite o nome do corredor" required />
           </div>
 
-          <div class="campo">
-            <label for="Percuso">Percuso</label>
-            <input id="Percuso" type="text" placeholder="Digite a Percuso" required />
+         <div class="campo">
+          <label for="Percuso">Percurso</label>
+          <select id="Percuso" required>
+            <option value="">Selecione o percurso</option>
+            <option value="2,5 km">2,5 km</option>
+            <option value="5 km">5 km</option>
+            <option value="10 km">10 km</option>
+          </select>
           </div>
 
           <div class="campo">
             <label for="Idade">Idade</label>
-            <input id="Idade" type="number" placeholder="Digite a idade" required />
+            <select id="Idade" type="number" placeholder="Digite a idade" required>
+              <option value="">Selecione a idade</option>
+              <option value="18-25">18-25</option>
+              <option value="26-35">26-35</option>
+              <option value="36-45">36-45</option>
+              <option value="46+">46+</option>
+            </select>
           </div>
 
           <div class="campo">
             <label for="CPF">CPF</label>
-            <input id="CPF" type="number" placeholder="Digite o CPF" required />
+            <input id="CPF" type="text" placeholder="Digite o CPF" required />
           </div>
 
           <button class="botao" type="submit">Salvar corredor</button>
@@ -243,14 +253,14 @@
       document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
         evento.preventDefault();
 
-        const Nome = document.querySelector("#Nome").value.trim();
-        const Percuso = document.querySelector("#Percuso").value.trim();
+        const nome = document.querySelector("#nome").value.trim();
+        const Percuso = document.querySelector("#Percuso ").value.trim();
          const Idade = document.querySelector("#Idade").value.trim();
         const CPF = document.querySelector("#CPF").value.trim();
 
         corredores.push({
           nome,
-          percuso,
+          Percuso,
           Idade,
           CPF
         });
@@ -289,7 +299,7 @@
       corredores.forEach((corredor, indice) => {
         linhas += `
           <tr>
-            <td>${corredor.Nome}</td>
+            <td>${corredor.nome}</td>
             <td>${corredor.Percuso}</td>
             <td>${corredor.CPF}</td>
             <td>${corredor.Idade}</td>
@@ -348,6 +358,9 @@
           🌦️ A prova ocorre com qualquer condição climática.
         </p>
         <h2>Percurso</h2>
+        <p>
+          " "
+          </p>
         <p>
          🛣️ Percursos: 2,5 km | 5 km | 10 km.
         </p>
