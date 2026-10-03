@@ -31,6 +31,7 @@
     nav button {
       border: 0;
       background: transparent;
+      color: #f8f1f9;
       padding: 10px 14px;
       cursor: pointer;
       font-size: 15px;
@@ -109,11 +110,11 @@
     th, td {
       text-align: left;
       padding: 12px;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #6DA3BD;
     }
 
     th {
-      background: #1e293b;
+      background: #334155;
     }
 
     .excluir {
@@ -137,7 +138,7 @@
       padding: 20px;
       border: 1px dashed #e2e0e0;
       border-radius: 6px;
-      color: #1e293b;
+      color: #FFFFFF;
     }
 
     .contador {
@@ -145,17 +146,54 @@
       font-size: 14px;
       color: #ece9ed;
     }
+    .banner {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 24px;
+    }
+    .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;   /* empurra os botões pra direita */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.1;
+}
+.logo small { display: block; color: #94A3B8; font-weight: normal;
+}
+
+
   </style>
 </head>
 <body>
   <header>
     <nav>
-      <button data-rota="inicio" class="ativo">Início</button>
-      <button data-rota="cadastro">Cadastrar Corredor</button>
-      <button data-rota="lista">Lista de Corredores</button>
-      <button data-rota="sobre">Sobre</button>
-    </nav>
-  </header>
+    <div class="logo" id="logo">
+      <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" fill="#EA580C"/>
+        <g fill="none" stroke="#fff" stroke-width="3"
+           stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 17 L6 24 L13 31"/>
+          <path d="M35 17 L42 24 L35 31"/>
+          <path d="M25 19 L22 27 L27 32 L26 38"/>
+          <path d="M22 27 L18 33"/>
+          <path d="M24 22 L29 24 M24 22 L19 23"/>
+        </g>
+        <circle cx="26" cy="14" r="3" fill="#fff"/>
+      </svg>
+      <span>Maratona de<br>Programação<small>2026</small></span>
+    </div>
+
+    <button data-rota="inicio" class="ativo">Início</button>
+    <button data-rota="cadastro">Cadastrar Corredor</button>
+    <button data-rota="lista">Lista de Corredores</button>
+    <button data-rota="sobre">Sobre</button>
+  </nav>
+</header>
 
   <main id="app"></main>
 
@@ -183,6 +221,7 @@
 
     function mostrarInicio() {
       app.innerHTML = `
+        <img class="banner" src="imagens/banner.png" alt="Largada da Maratona de Programação 2026" />
         <h1>Cadastro de Corredores</h1>
         <p>
          <strong> 1ª CORRIDA - Maratona de Programação 2026 </strong>!
@@ -208,7 +247,14 @@
       document.querySelector("#btnVerCorredores")
         .addEventListener("click", () => irPara("lista"));
     }
-
+    function mascaraCPF(valor) {
+     return valor
+     .replace(/\D/g, "")                 
+     .slice(0, 11)                        
+     .replace(/(\d{3})(\d)/, "$1.$2")     
+     .replace(/(\d{3})(\d)/, "$1.$2")     
+     .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
+    }
     function mostrarCadastro() {
       app.innerHTML = `
         <h1>Cadastrar Corredor</h1>
@@ -220,8 +266,8 @@
           </div>
 
          <div class="campo">
-          <label for="Percuso">Percurso</label>
-          <select id="Percuso" required>
+          <label for="Percurso">Percurso</label>
+          <select id="Percurso" required>
             <option value="">Selecione o percurso</option>
             <option value="2,5 km">2,5 km</option>
             <option value="5 km">5 km</option>
@@ -231,36 +277,45 @@
 
           <div class="campo">
             <label for="Idade">Idade</label>
-            <select id="Idade" type="number" placeholder="Digite a idade" required>
-              <option value="">Selecione a idade</option>
-              <option value="18-25">18-25</option>
-              <option value="26-35">26-35</option>
-              <option value="36-45">36-45</option>
-              <option value="46+">46+</option>
-            </select>
+            <input id="Idade" type="number" min="14" max="80" placeholder="Digite a idade" required />
           </div>
 
           <div class="campo">
             <label for="CPF">CPF</label>
-            <input id="CPF" type="text" placeholder="Digite o CPF" required />
+            <input id="CPF" type="text" placeholder="000.000.000-00"
+                    maxlength="14" inputmode="numeric" required />
           </div>
 
           <button class="botao" type="submit">Salvar corredor</button>
           <div id="mensagem"></div>
         </form>
       `;
-
-      document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
-        evento.preventDefault();
+    const campoCPF = document.querySelector("#CPF");
+          campoCPF.addEventListener("input", () => {
+  campoCPF.value = mascaraCPF(campoCPF.value);
+});
+          document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
+            evento.preventDefault();
 
         const nome = document.querySelector("#nome").value.trim();
-        const Percuso = document.querySelector("#Percuso ").value.trim();
+        const Percurso = document.querySelector("#Percurso").value.trim();
          const Idade = document.querySelector("#Idade").value.trim();
         const CPF = document.querySelector("#CPF").value.trim();
 
+        if (Percurso === "10 km" && Number(Idade) < 18) {
+          document.querySelector("#mensagem").innerHTML =
+          `<div class="mensagem">Para o percurso de 10 km a idade mínima é 18 anos.</div>`;
+        return;
+        }
+        if (CPF.replace(/\D/g, "").length !== 11) { 
+          document.querySelector("#mensagem").innerHTML =
+          `<div class="mensagem">CPF inválido. Digite os 11 números.</div>`;
+         return;
+        }
+
         corredores.push({
           nome,
-          Percuso,
+          Percurso,
           Idade,
           CPF
         });
@@ -270,8 +325,10 @@
 
         evento.target.reset();
       });
-    }
-
+document.querySelector("#logo")
+  .addEventListener("click", () => irPara("inicio"));
+      }
+    
     function mostrarLista() {
       app.innerHTML = `
         <h1>Lista de Corredores</h1>
@@ -300,7 +357,7 @@
         linhas += `
           <tr>
             <td>${corredor.nome}</td>
-            <td>${corredor.Percuso}</td>
+            <td>${corredor.Percurso}</td>
             <td>${corredor.CPF}</td>
             <td>${corredor.Idade}</td>
             <td>
@@ -315,7 +372,7 @@
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Percuso</th>
+              <th>Percurso</th>
               <th>CPF</th>
               <th>Idade</th>
               <th>Ações</th>
@@ -358,7 +415,6 @@
           🌦️ A prova ocorre com qualquer condição climática.
         </p>
         <h2>Percurso</h2>
-        </p>
         <p>
          🛣️ Percursos: 2,5 km | 5 km | 10 km.
         </p>
@@ -377,9 +433,10 @@
         </p>
         <p>
         🏆 Troféus: 2,5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 10 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem; Faixa etária (top 3 masc e fem): 18 a 29; 30 a 39; 40 a 44; 45 a 49; 50 a 54; 55 a 59; 60 a 64; 65 a 69; 70+.
-         </p>
+        </p>
         <p>
           👥 Assessorias/Equipes/Academias: 1 troféu para a assessoria/equipe/academia com maior número de inscritos.
+        </p>
       `;
     }
 
