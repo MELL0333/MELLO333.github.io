@@ -26,6 +26,7 @@
       gap: 10px;
       padding: 16px 20px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     nav button {
@@ -93,7 +94,8 @@
       margin-bottom: 6px;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       padding: 10px;
       border: 1px solid #e2e0e1;
@@ -146,60 +148,64 @@
       font-size: 14px;
       color: #ece9ed;
     }
+
     .banner {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 24px;
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 24px;
     }
+
     .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: auto;   /* empurra os botões pra direita */
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1.1;
-}
-.logo small { display: block; color: #94A3B8; font-weight: normal;
-}
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: auto; /* empurra os botões pra direita */
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 1.1;
+    }
 
-
+    .logo small {
+      display: block;
+      color: #94A3B8;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body>
   <header>
     <nav>
-    <div class="logo" id="logo">
-      <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
-        <circle cx="24" cy="24" r="22" fill="#EA580C"/>
-        <g fill="none" stroke="#fff" stroke-width="3"
-           stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13 17 L6 24 L13 31"/>
-          <path d="M35 17 L42 24 L35 31"/>
-          <path d="M25 19 L22 27 L27 32 L26 38"/>
-          <path d="M22 27 L18 33"/>
-          <path d="M24 22 L29 24 M24 22 L19 23"/>
-        </g>
-        <circle cx="26" cy="14" r="3" fill="#fff"/>
-      </svg>
-      <span>Maratona de<br>Programação<small>2026</small></span>
-    </div>
+      <div class="logo" id="logo">
+        <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="#EA580C"/>
+          <g fill="none" stroke="#fff" stroke-width="3"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 17 L6 24 L13 31"/>
+            <path d="M35 17 L42 24 L35 31"/>
+            <path d="M25 19 L22 27 L27 32 L26 38"/>
+            <path d="M22 27 L18 33"/>
+            <path d="M24 22 L29 24 M24 22 L19 23"/>
+          </g>
+          <circle cx="26" cy="14" r="3" fill="#fff"/>
+        </svg>
+        <span>Maratona de<br>Programação<small>2026</small></span>
+      </div>
 
-    <button data-rota="inicio" class="ativo">Início</button>
-    <button data-rota="cadastro">Cadastrar Corredor</button>
-    <button data-rota="lista">Lista de Corredores</button>
-    <button data-rota="sobre">Sobre</button>
-  </nav>
-</header>
+      <button data-rota="inicio" class="ativo">Início</button>
+      <button data-rota="cadastro">Cadastrar Corredor</button>
+      <button data-rota="lista">Lista de Corredores</button>
+      <button data-rota="sobre">Sobre</button>
+    </nav>
+  </header>
 
   <main id="app"></main>
 
   <script>
-  
     const corredores = [];
+    const ANO_EVENTO = 2026;
 
     const app = document.querySelector("#app");
     const botoesMenu = document.querySelectorAll("nav button");
@@ -224,7 +230,7 @@
         <img class="banner" src="imagens/banner.png" alt="Largada da Maratona de Programação 2026" />
         <h1>Cadastro de Corredores</h1>
         <p>
-         <strong> 1ª CORRIDA - Maratona de Programação 2026 </strong>!
+          <strong> 1ª CORRIDA - Maratona de Programação 2026 </strong>!
         </p>
 
         <p>
@@ -247,14 +253,28 @@
       document.querySelector("#btnVerCorredores")
         .addEventListener("click", () => irPara("lista"));
     }
+
     function mascaraCPF(valor) {
-     return valor
-     .replace(/\D/g, "")                 
-     .slice(0, 11)                        
-     .replace(/(\d{3})(\d)/, "$1.$2")     
-     .replace(/(\d{3})(\d)/, "$1.$2")     
-     .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
+      return valor
+        .replace(/\D/g, "")
+        .slice(0, 11)
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
+
+    // Idade em 31/12 do ano do evento (regra da CBAt): basta subtrair os anos
+    function calcularIdade(dataISO) {
+      const ano = Number(dataISO.split("-")[0]);
+      return ANO_EVENTO - ano;
+    }
+
+    // Converte "2000-05-17" em "17/05/2000"
+    function formatarData(dataISO) {
+      const [ano, mes, dia] = dataISO.split("-");
+      return `${dia}/${mes}/${ano}`;
+    }
+
     function mostrarCadastro() {
       app.innerHTML = `
         <h1>Cadastrar Corredor</h1>
@@ -265,70 +285,71 @@
             <input id="nome" type="text" placeholder="Digite o nome do corredor" required />
           </div>
 
-         <div class="campo">
-          <label for="Percurso">Percurso</label>
-          <select id="Percurso" required>
-            <option value="">Selecione o percurso</option>
-            <option value="2,5 km">2,5 km</option>
-            <option value="5 km">5 km</option>
-            <option value="10 km">10 km</option>
-          </select>
+          <div class="campo">
+            <label for="Percurso">Percurso</label>
+            <select id="Percurso" required>
+              <option value="">Selecione o percurso</option>
+              <option value="2,5 km">2,5 km</option>
+              <option value="5 km">5 km</option>
+              <option value="10 km">10 km</option>
+            </select>
           </div>
 
           <div class="campo">
-            <label for="Idade">Idade</label>
-            <input id="Idade" type="number" min="14" max="80" placeholder="Digite a idade" required />
+            <label for="Nascimento">Data de nascimento</label>
+            <input id="Nascimento" type="date" min="1900-01-01" required />
           </div>
 
           <div class="campo">
             <label for="CPF">CPF</label>
             <input id="CPF" type="text" placeholder="000.000.000-00"
-                    maxlength="14" inputmode="numeric" required />
+                   maxlength="14" inputmode="numeric" required />
           </div>
 
           <button class="botao" type="submit">Salvar corredor</button>
           <div id="mensagem"></div>
         </form>
       `;
-    const campoCPF = document.querySelector("#CPF");
-          campoCPF.addEventListener("input", () => {
-  campoCPF.value = mascaraCPF(campoCPF.value);
-});
-          document.querySelector("#formCorredor").addEventListener("submit", function(evento) {
-            evento.preventDefault();
+
+      const campoCPF = document.querySelector("#CPF");
+      campoCPF.addEventListener("input", () => {
+        campoCPF.value = mascaraCPF(campoCPF.value);
+      });
+
+      document.querySelector("#formCorredor").addEventListener("submit", function (evento) {
+        evento.preventDefault();
 
         const nome = document.querySelector("#nome").value.trim();
         const Percurso = document.querySelector("#Percurso").value.trim();
-         const Idade = document.querySelector("#Idade").value.trim();
+        const Nascimento = document.querySelector("#Nascimento").value;
         const CPF = document.querySelector("#CPF").value.trim();
+        const idade = calcularIdade(Nascimento);
 
-        if (Percurso === "10 km" && Number(Idade) < 18) {
+        if (idade < 14) {
           document.querySelector("#mensagem").innerHTML =
-          `<div class="mensagem">Para o percurso de 10 km a idade mínima é 18 anos.</div>`;
-        return;
+            `<div class="mensagem">A idade mínima para a prova é 14 anos.</div>`;
+          return;
         }
-        if (CPF.replace(/\D/g, "").length !== 11) { 
+        if (Percurso === "10 km" && idade < 18) {
           document.querySelector("#mensagem").innerHTML =
-          `<div class="mensagem">CPF inválido. Digite os 11 números.</div>`;
-         return;
+            `<div class="mensagem">Para o percurso de 10 km a idade mínima é 18 anos.</div>`;
+          return;
+        }
+        if (CPF.replace(/\D/g, "").length !== 11) {
+          document.querySelector("#mensagem").innerHTML =
+            `<div class="mensagem">CPF inválido. Digite os 11 números.</div>`;
+          return;
         }
 
-        corredores.push({
-          nome,
-          Percurso,
-          Idade,
-          CPF
-        });
+        corredores.push({ nome, Percurso, Nascimento, CPF });
 
         document.querySelector("#mensagem").innerHTML =
           `<div class="mensagem">Corredor cadastrado com sucesso.</div>`;
 
         evento.target.reset();
       });
-document.querySelector("#logo")
-  .addEventListener("click", () => irPara("inicio"));
-      }
-    
+    }
+
     function mostrarLista() {
       app.innerHTML = `
         <h1>Lista de Corredores</h1>
@@ -359,7 +380,7 @@ document.querySelector("#logo")
             <td>${corredor.nome}</td>
             <td>${corredor.Percurso}</td>
             <td>${corredor.CPF}</td>
-            <td>${corredor.Idade}</td>
+            <td>${formatarData(corredor.Nascimento)}</td>
             <td>
               <button class="excluir" data-indice="${indice}">Excluir</button>
             </td>
@@ -374,7 +395,7 @@ document.querySelector("#logo")
               <th>Nome</th>
               <th>Percurso</th>
               <th>CPF</th>
-              <th>Idade</th>
+              <th>Nascimento</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -385,7 +406,7 @@ document.querySelector("#logo")
       `;
 
       document.querySelectorAll(".excluir").forEach(botao => {
-        botao.addEventListener("click", function() {
+        botao.addEventListener("click", function () {
           const indice = Number(this.dataset.indice);
           corredores.splice(indice, 1);
           renderizarTabela();
@@ -403,26 +424,26 @@ document.querySelector("#logo")
           🤝Promoção: UNIVERSIDADE MAURICIO DE NASSAU (UNINASSAU).
         </p>
         <p>
-         🏅 Supervisão técnica: Federação Sergipana de Atletismo (FSAt).
+          🏅 Supervisão técnica: Federação Sergipana de Atletismo (FSAt).
         </p>
         <p>
-        ⏰ Largada: 06h30 (pode sofrer ajustes por motivos operacionais: trânsito, energia, comunicação, quantidade de inscritos etc.).
+          ⏰ Largada: 06h30 (pode sofrer ajustes por motivos operacionais: trânsito, energia, comunicação, quantidade de inscritos etc.).
         </p>
         <p>
-         📍 Local largada/chegada: Estacionamento do Shopping RioMar Aracaju — Av. Delmiro Gouveia, 400 – Coroa do Meio – Aracaju/SE – CEP 49035-500.
+          📍 Local largada/chegada: Estacionamento do Shopping RioMar Aracaju — Av. Delmiro Gouveia, 400 – Coroa do Meio – Aracaju/SE – CEP 49035-500.
         </p>
         <p>
           🌦️ A prova ocorre com qualquer condição climática.
         </p>
         <h2>Percurso</h2>
         <p>
-         🛣️ Percursos: 2,5 km | 5 km | 10 km.
+          🛣️ Percursos: 2,5 km | 5 km | 10 km.
         </p>
         <p>
           ⏳ Tempo máximo de prova: 1h30 (atletas fora do tempo projetado podem ser convidados a se retirar do percurso).
         </p>
         <p>
-        👶 Idade mínima (considera a idade em 31/12 do ano do evento – Norma CBAt): ✅ 2,5 km e 5 km: mínimo 14 anos; ✅ 10 km: mínimo 18 anos.
+          👶 Idade mínima (considera a idade em 31/12 do ano do evento – Norma CBAt): ✅ 2,5 km e 5 km: mínimo 14 anos; ✅ 10 km: mínimo 18 anos.
         </p>
         <p>
           🧾 Menores de 18 anos: somente com autorização do responsável legal (assinatura do termo) + entrega de cópia de documento oficial com foto (retida na retirada do kit).
@@ -432,7 +453,7 @@ document.querySelector("#logo")
           🏅 Medalha finisher para todos que concluírem regularmente.
         </p>
         <p>
-        🏆 Troféus: 2,5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 10 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem; Faixa etária (top 3 masc e fem): 18 a 29; 30 a 39; 40 a 44; 45 a 49; 50 a 54; 55 a 59; 60 a 64; 65 a 69; 70+.
+          🏆 Troféus: 2,5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 5 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem. 10 km — Geral top 3 masc e top 3 fem; PCD top 3 masc e top 3 fem; Faixa etária (top 3 masc e fem): 18 a 29; 30 a 39; 40 a 44; 45 a 49; 50 a 54; 55 a 59; 60 a 64; 65 a 69; 70+.
         </p>
         <p>
           👥 Assessorias/Equipes/Academias: 1 troféu para a assessoria/equipe/academia com maior número de inscritos.
@@ -445,6 +466,10 @@ document.querySelector("#logo")
         irPara(botao.dataset.rota);
       });
     });
+
+    // Logo clicável: volta para o início
+    document.querySelector("#logo")
+      .addEventListener("click", () => irPara("inicio"));
 
     mostrarInicio();
   </script>
