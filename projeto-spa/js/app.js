@@ -1,17 +1,10 @@
-/* =========================================================
-   SPA - Cadastro de Corredores
-   Organização: dados -> utilitários -> telas -> regras -> rotas
-   ========================================================= */
 
-/* ---------- 1. DADOS (estado da aplicação) ---------- */
 const ANO_EVENTO = 2026;
 const corredores = [];
 
-/* ---------- 2. ELEMENTOS GLOBAIS ---------- */
 const app = document.querySelector("#app");
 const botoesMenu = document.querySelectorAll("nav button");
 
-/* ---------- 3. UTILITÁRIOS ---------- */
 function mascaraCPF(valor) {
   return valor
     .replace(/\D/g, "")
@@ -21,7 +14,7 @@ function mascaraCPF(valor) {
     .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
 }
 
-// Idade em 31/12 do ano do evento (Norma CBAt)
+
 function calcularIdade(dataNascimento) {
   const ano = Number(dataNascimento.slice(0, 4));
   return ANO_EVENTO - ano;
@@ -38,7 +31,7 @@ function mostrarMensagem(texto) {
     `<div class="mensagem">${texto}</div>`;
 }
 
-/* ---------- 4. TELAS (views) ---------- */
+
 function mostrarInicio() {
   app.innerHTML = `
     <img class="banner" src="imagens/banner.png" alt="Largada da Maratona de Programação 2026" />
@@ -192,7 +185,7 @@ function mostrarSobre() {
   `;
 }
 
-/* ---------- 5. REGRAS DE NEGÓCIO (ações) ---------- */
+
 function salvarCorredor(evento) {
   evento.preventDefault();
 
@@ -228,7 +221,7 @@ function excluirCorredor(indice) {
   renderizarTabela();
 }
 
-/* ---------- 6. NAVEGAÇÃO (rotas) ---------- */
+
 function marcarMenuAtivo(rota) {
   botoesMenu.forEach(botao => {
     botao.classList.toggle("ativo", botao.dataset.rota === rota);
@@ -247,7 +240,7 @@ function irPara(rota) {
   if (rotas[rota]) rotas[rota]();
 }
 
-/* ---------- 7. INICIALIZAÇÃO ---------- */
+
 botoesMenu.forEach(botao => {
   botao.addEventListener("click", () => irPara(botao.dataset.rota));
 });
