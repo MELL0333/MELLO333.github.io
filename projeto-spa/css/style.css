@@ -7,7 +7,7 @@ body {
   color: #f8f1f9;
 }
 
-/* ---------- Cabeçalho / menu ---------- */
+
 header {
   border-bottom: 1px solid #334155;
   background: #1E293B;
@@ -41,7 +41,7 @@ nav button.ativo {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-right: auto; /* empurra os botões pra direita */
+  margin-right: auto; 
   cursor: pointer;
   font-weight: bold;
   font-size: 14px;
@@ -54,7 +54,7 @@ nav button.ativo {
   font-weight: normal;
 }
 
-/* ---------- Conteúdo ---------- */
+
 main {
   max-width: 900px;
   margin: 0 auto;
@@ -91,7 +91,7 @@ p {
   color: #ece9ed;
 }
 
-/* ---------- Botões ---------- */
+
 .botao {
   border: 1px solid #55334b;
   background: #EA580C;
@@ -115,7 +115,7 @@ p {
   cursor: pointer;
 }
 
-/* ---------- Formulário ---------- */
+
 form {
   max-width: 500px;
 }
@@ -146,7 +146,7 @@ select {
   border-radius: 6px;
 }
 
-/* ---------- Tabela ---------- */
+
 table {
   width: 100%;
   border-collapse: collapse;
